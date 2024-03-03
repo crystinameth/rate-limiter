@@ -2,12 +2,10 @@ import type express from 'express'
 
 import {
     counters,
-    rateLimitWindowInSeconds,
+    rateLimitWindowInMilliSeconds,
     requestLimitPerWindow,
 } from './data'
 
-const MILLI_SECOND = 1000
-const rateLimitWindowInMilliSeconds = rateLimitWindowInSeconds * MILLI_SECOND
 
 // Rate limiting middleware
 export const rateLimitMiddleware = (

@@ -1,9 +1,7 @@
 import type express from 'express'
 
-import { requestLogs, requestThreshold, slidingWindowInSeconds } from './data'
+import { requestLogs, requestThreshold, slidingWindowInMilliSeconds } from './data'
 
-const MILLI_SECOND = 1000
-const slidingWindowInMilliSeconds = slidingWindowInSeconds * MILLI_SECOND
 
 export const rateLimitMiddleware = (
     req: express.Request,

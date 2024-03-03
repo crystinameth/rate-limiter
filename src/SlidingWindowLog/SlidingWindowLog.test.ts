@@ -2,6 +2,7 @@ import supertest from "supertest";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 import { SlidingWindowLogApp } from "./app";
+import { slidingWindowInMilliSeconds, requestThreshold } from "./data";
 
 describe('Sliding Window Log Rate Limiter Tests', () => {
     beforeEach(() => {
@@ -22,11 +23,11 @@ describe('Sliding Window Log Rate Limiter Tests', () => {
     })
 
     it('/limited should properly rate limit requests', async () => {
-        const rateLimit = 10
-        const windowDuration = 62
+        const twoSecondsInMs = 2000
+        const twoSecondsPastWindow = slidingWindowInMilliSeconds + twoSecondsInMs
 
         // Perform requests up to rate limit
-        for (let i = 0; i < rateLimit; i++) {
+        for (let i = 0; i < requestThreshold; i++) {
             const res = await supertest(SlidingWindowLogApp).get('/limited')
             expect(res.statusCode).toBe(200)
         }
@@ -37,7 +38,7 @@ describe('Sliding Window Log Rate Limiter Tests', () => {
     
         // Advance time to allow some requests to fall outside the sliding window
         // Convert window duration to milliseconds 
-        vi.advanceTimersByTime(windowDuration * 1000)
+        vi.advanceTimersByTime(twoSecondsPastWindow)
     
         // The next request should be allowed as some requests are now outside the sliding window
         const resAllowed = await supertest(SlidingWindowLogApp).get('/limited')
