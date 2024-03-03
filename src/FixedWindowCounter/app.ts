@@ -1,6 +1,6 @@
 import express  from "express";
 
-import { rateLimitMiddleware } from "./FixedWindowCounter";
+import { rateLimitMiddleware } from "./rateLimitMiddleware";
 
 export const FixedWindowCounterApp = express()
 const port = 7080
