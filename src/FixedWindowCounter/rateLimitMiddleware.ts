@@ -6,6 +6,9 @@ import {
     requestLimitPerWindow,
 } from './data'
 
+const MILLI_SECOND = 1000
+const rateLimitWindowInMilliSeconds = rateLimitWindowInSeconds * MILLI_SECOND
+
 // Rate limiting middleware
 export const rateLimitMiddleware = (
     req: express.Request,
@@ -19,10 +22,9 @@ export const rateLimitMiddleware = (
     }
 
     const currentTime = Date.now()
-    const windowStart = currentTime - (currentTime % (rateLimitWindowInSeconds * 1000))
 
     if(!counters.has(ip)) {
-        counters.set(ip, { count: 1, startTime: windowStart })
+        counters.set(ip, { count: 1, startTime: currentTime })
         next()
         return
     }
@@ -30,10 +32,13 @@ export const rateLimitMiddleware = (
     const windowCounter = counters.get(ip)
 
     if(windowCounter) {
-        if(windowCounter.startTime < windowStart) {
+            const difference = currentTime - windowCounter.startTime
+            const isGreaterThanWindow = difference > rateLimitWindowInMilliSeconds
+
+            if(isGreaterThanWindow){
             //Reset the counter for the new window 
             windowCounter.count = 1
-            windowCounter.startTime = windowStart
+            windowCounter.startTime = currentTime
             next()
         } else if (windowCounter.count < requestLimitPerWindow) {
             //Increment the counter and allow the request

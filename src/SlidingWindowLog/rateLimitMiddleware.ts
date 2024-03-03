@@ -3,6 +3,7 @@ import type express from 'express'
 import { requestLogs, requestThreshold, slidingWindowInSeconds } from './data'
 
 const MILLI_SECOND = 1000
+const slidingWindowInMilliSeconds = slidingWindowInSeconds * MILLI_SECOND
 
 export const rateLimitMiddleware = (
     req: express.Request,
@@ -27,7 +28,7 @@ export const rateLimitMiddleware = (
     if(log) {
         log.timestamps = log.timestamps.filter((timestamp) => {
             const difference = currentTime - timestamp
-            const isWithinWindow = difference <= slidingWindowInSeconds * MILLI_SECOND
+            const isWithinWindow = difference <= slidingWindowInMilliSeconds
 
             return isWithinWindow
         })
@@ -35,6 +36,7 @@ export const rateLimitMiddleware = (
         if(log.timestamps.length < requestThreshold) {
             //Allow request
             log.timestamps.push(currentTime)
+            
             next()
         } else {
             //Rate limit exceeded
