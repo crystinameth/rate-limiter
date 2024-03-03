@@ -39,7 +39,7 @@ describe('Fixed Window Counter Tests', () => {
             await supertest(FixedWindowCounterApp).get('/limited')
         }
 
-        // Advance time to simulate end of rate limit window
+        // Advance time to simulate end of rate limit window (in millisecs)
         vi.advanceTimersByTime(windowDurationInSeconds * 1000)
 
         // Make requests within the new window
