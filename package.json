@@ -6,6 +6,7 @@
   "scripts": {
     "build": "tsc",
     "start-token-bucket": "nodemon --watch 'src/**/*' -e ts --exec 'ts-node src/TokenBucket/app.ts'",
+    "start-leaky-bucket": "nodemon --watch 'src/**/*' -e ts --exec 'ts-node src/LeakyBucket/app.ts'",
     "start-fixed-window-counter": "nodemon --watch 'src/**/*' -e ts --exec 'ts-node src/FixedWindowCounter/app.ts'",
     "start-sliding-window-log": "nodemon --watch 'src/**/*' -e ts --exec 'ts-node src/SlidingWindowLog/app.ts'",
     "start-sliding-window-counter": "nodemon --watch 'src/**/*' -e ts --exec 'ts-node src/SlidingWindowCounter/app.ts'",
